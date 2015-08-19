@@ -10,18 +10,14 @@ test = test.drop('Player', axis=1)
 test_answers = test['Pos']
 test = test.drop('Pos', axis=1)
 test = test.dropna()
-
 train = train.drop('Tm', axis=1)
 train = train.drop('Player', axis=1)
 train = train.dropna()
 
-#train = train[np.isfinite(train)]
-
-
 x = train
 x = train.drop('Pos', axis = 1)
 
-
+#TEST 1: POSITIONS 1-5 WITH HALF POSITIONS INCLUDED
 test_answers = test_answers.replace('PG', 1)
 test_answers = test_answers.replace('C', 5)
 test_answers = test_answers.replace('PF', 4)
@@ -37,8 +33,6 @@ test_answers = test_answers.replace('PF-C', 4.5)
 test_answers = test_answers.replace('C-PF', 4.5)
 test_answers = test_answers.replace('C-SF', 4)
 test_answers = test_answers.dropna()
-
-train['Pos']
 
 train['Pos'] = train['Pos'].replace('PG', 1)
 train['Pos'] = train['Pos'].replace('C', 5)
@@ -88,11 +82,11 @@ for t in range(2, 100):
     differences = []
 plt.plot(acc)
 #47% got EXACT position, 81% got it within a half position
+#count/len(differences) gets accuracy rate
 
 
 
-
-
+#TEST 2: POSITIONS 1-5 WITH HALF POSITIONS EXCLUDED
 train = pd.read_csv('train.csv')
 test = pd.read_csv('validation.csv')
 
@@ -125,55 +119,24 @@ train = train[train['Pos'] != 'PF-C']
 train = train[train['Pos'] != 'SF-PF']
 train = train[train['Pos'] != 'C-PF']
 
-
-
-
-
-
-
-#df[df['Correlation'] >= 0]
-
-#train = train[np.isfinite(train)]
-
-
 x = train
 x = train.drop('Pos', axis = 1)
-
 
 test_answers = test_answers.replace('PG', 1)
 test_answers = test_answers.replace('C', 5)
 test_answers = test_answers.replace('PF', 4)
 test_answers = test_answers.replace('SF', 3)
 test_answers = test_answers.replace('SG', 2)
-test_answers = test_answers.replace('SF-SG', 2.5)
-test_answers = test_answers.replace('SG-SF', 2.5)
-test_answers = test_answers.replace('PG-SG', 1.5)
-test_answers = test_answers.replace('SG-PG', 1.5)
-test_answers = test_answers.replace('SF-PF', 3.5)
-test_answers = test_answers.replace('PF-SF', 3.5)
-test_answers = test_answers.replace('PF-C', 4.5)
-test_answers = test_answers.replace('C-PF', 4.5)
 test_answers = test_answers.replace('C-SF', 4)
 test_answers = test_answers.dropna()
-
-train['Pos']
 
 train['Pos'] = train['Pos'].replace('PG', 1)
 train['Pos'] = train['Pos'].replace('C', 5)
 train['Pos'] = train['Pos'].replace('PF', 4)
 train['Pos'] = train['Pos'].replace('SF', 3)
 train['Pos'] = train['Pos'].replace('SG', 2)
-train['Pos'] = train['Pos'].replace('SF-SG', 2.5)
-train['Pos'] = train['Pos'].replace('C-PF', 4.5)
-train['Pos'] = train['Pos'].replace('PF-SF', 3.5)
-train['Pos'] = train['Pos'].replace('PG-SG', 1.5)
 train['Pos'] = train['Pos'].replace('SG-PF', 3)
-train['Pos'] = train['Pos'].replace('SF-PF', 3.5)
-train['Pos'] = train['Pos'].replace('SG-SF', 2.5)
-train['Pos'] = train['Pos'].replace('PF-C', 4.5)
-train['Pos'] = train['Pos'].replace('SG-PG', 1.5)
 train = train.dropna()
-
 y = train['Pos']
 
 test = test.dropna()
@@ -181,7 +144,6 @@ model = RF(n_estimators = 10)
 model.fit(x,y)
 predicted_results = model.predict(test)
 
-#round to nearest half position
 for i in range(len(predicted_results)):
     predicted_results[i] = round(predicted_results[i])
 
@@ -199,33 +161,10 @@ for i in differences:
     if(i == 0):
         count += 1
 #2/3 accuracy based on pure positions alone 
+#count/len(differences) gets accuracy rate
         
         
-
-#try changing 2/3 to 'wing' , and 4/5 to 'big'   only 1,2,3 categories. see what this does for accuracy
-#create confusion matrix. cols actual positions, rows positions estimated. total freqs displayed.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#train = train[np.isfinite(train)]
-
+#TEST 3: POSITIONS 1-3 (POINT, WING, POST) - NO HALF POSITIONS
 train = pd.read_csv('train.csv')
 test = pd.read_csv('validation.csv')
 
@@ -237,7 +176,6 @@ test = test[test['Pos'] != 'SG-PG']
 test = test[test['Pos'] != 'PF-SF']
 test = test[test['Pos'] != 'SF-PF']
 
-
 test_answers = test['Pos']
 test = test.drop('Pos', axis=1)
 test = test.dropna()
@@ -245,18 +183,13 @@ test = test.dropna()
 train = train.drop('Tm', axis=1)
 train = train.drop('Player', axis=1)
 train = train.dropna()
-
 train = train[train['Pos'] != 'PG-SG']
 train = train[train['Pos'] != 'SG-PG']
 train = train[train['Pos'] != 'PF-SF']
 train = train[train['Pos'] != 'SF-PF']
 
-
-
-
 x = train
 x = train.drop('Pos', axis = 1)
-
 
 test_answers = test_answers.replace('PG', 1)
 test_answers = test_answers.replace('C', 3)
@@ -265,10 +198,6 @@ test_answers = test_answers.replace('SF', 2)
 test_answers = test_answers.replace('SG', 2)
 test_answers = test_answers.replace('SF-SG', 2)
 test_answers = test_answers.replace('SG-SF', 2)
-test_answers = test_answers.replace('PG-SG', 1.5)
-test_answers = test_answers.replace('SG-PG', 1.5)
-test_answers = test_answers.replace('SF-PF', 2.5)
-test_answers = test_answers.replace('PF-SF', 2.5)
 test_answers = test_answers.replace('PF-C', 3)
 test_answers = test_answers.replace('C-PF', 3)
 test_answers = test_answers.replace('C-SF', 3)
@@ -283,13 +212,9 @@ train['Pos'] = train['Pos'].replace('SF', 2)
 train['Pos'] = train['Pos'].replace('SG', 2)
 train['Pos'] = train['Pos'].replace('SF-SG', 2)
 train['Pos'] = train['Pos'].replace('C-PF', 3)
-train['Pos'] = train['Pos'].replace('PF-SF', 2.5)
-train['Pos'] = train['Pos'].replace('PG-SG', 1.5)
 train['Pos'] = train['Pos'].replace('SG-PF', 2)
-train['Pos'] = train['Pos'].replace('SF-PF', 2)
 train['Pos'] = train['Pos'].replace('SG-SF', 2)
 train['Pos'] = train['Pos'].replace('PF-C', 3)
-train['Pos'] = train['Pos'].replace('SG-PG', 1)
 train = train.dropna()
 
 y = train['Pos']
@@ -317,20 +242,14 @@ for i in differences:
     if(i == 0):
         count += 1
 #83% accurate based on point/wing/post positions
+#count/len(differences) gets you accuracy rate
 
-
-
-
-
-
-
-    
+#TEST 4: K-MEANS CLUSTERING OF POSITIONS INTO 5 CATEGORIES
+#MEASUREMENT STILL IN PROGRESS  
 print(__doc__)
-
 from time import time
 import numpy as np
 import matplotlib.pyplot as plt
-
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.datasets import load_digits
@@ -338,7 +257,6 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
 
 np.random.seed(42)
-
 digits = load_digits()
 data = scale(train)
 
@@ -351,7 +269,6 @@ sample_size = 300   #experiment with this
 
 print("n_digits: %d, \t n_samples %d, \t n_features %d"
       % (n_digits, n_samples, n_features))
-
 print(79 * '_')
 print('% 9s' % 'init'
       '    time  inertia    homo   compl  v-meas     ARI AMI  silhouette')
